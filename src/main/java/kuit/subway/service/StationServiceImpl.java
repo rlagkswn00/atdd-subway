@@ -38,4 +38,10 @@ public class StationServiceImpl implements StationService {
 
         return stations;
     }
+
+    @Override
+    public Long deleteStation(Long id) {
+        stationRepository.deleteById(id);
+        return id;
+    }
 }

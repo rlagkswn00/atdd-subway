@@ -11,4 +11,6 @@ public interface StationService {
 
     SaveStationRes createStation(SaveStationReq saveStationReq);
     List<FindStationsRes> findStations();
+
+    Long deleteStation(Long id);
 }
