@@ -14,10 +14,12 @@ import org.junit.jupiter.api.Test;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static kuit.subway.study.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.utils.ExtractableResponseUtil.*;
+import static org.assertj.core.api.Assertions.*;
 
 public class StationAcceptanceTest extends AcceptanceTest {
 
@@ -33,6 +35,27 @@ public class StationAcceptanceTest extends AcceptanceTest {
     private ExtractableResponse<Response> 지하철_역_생성(SaveStationReq saveStationReq){
         return post("/station", saveStationReq);
     }
+
+    @DisplayName("역 조회 테스트")
+    @Test
+    void 지하철_역_전체_조회_테스트() {
+        //given - 2개의 역 생성
+        지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+        지하철_역_생성(지하철_역_생성_픽스처("별내별가람역"));
+
+        //when - 역 조회
+        ExtractableResponse<Response> extract = 지하철_역_조회();
+        List<Object> responseList = extract.body().jsonPath().getList(".");
+
+        //then 정상 코드 반환, 2개의 역 조회 되어야 함.
+        Assertions.assertEquals(200, extract.statusCode());
+        assertThat(responseList).extracting("name").contains("별내역","별내별가람역");
+    }
+
+    private ExtractableResponse<Response> 지하철_역_조회(){
+        return get("/stations");
+    }
+
 
 
 
