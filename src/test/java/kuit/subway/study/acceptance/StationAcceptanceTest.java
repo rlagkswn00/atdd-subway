@@ -57,6 +57,23 @@ public class StationAcceptanceTest extends AcceptanceTest {
     }
 
 
+    @DisplayName("역 삭제 테스트")
+    @Test
+    void 지하철_역_삭제_테스트() {
+        //given - 1개의 역 생성
+        지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+
+        //when - 역 삭제
+        ExtractableResponse<Response> extract = 지하철_역_삭제(1L);
+
+        //then 정상 코드 반환
+        Assertions.assertEquals(200, extract.statusCode());
+    }
+
+    private ExtractableResponse<Response> 지하철_역_삭제(Long id){
+        return delete("/station/" + id);
+    }
+
 
 
 }
