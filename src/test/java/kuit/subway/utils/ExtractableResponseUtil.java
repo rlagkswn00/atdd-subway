@@ -23,4 +23,11 @@ public class ExtractableResponseUtil {
                 .then().log().all()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> delete(String path) {
+        return RestAssured.given().log().all()
+                .when().delete(path)
+                .then().log().all()
+                .extract();
+    }
 }
