@@ -18,10 +18,11 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/stations")
 public class SubwayController {
     private final StationService stationService;
 
-    @PostMapping("/station")
+    @PostMapping
     public ResponseEntity<SaveStationRes> createStation(@RequestBody SaveStationReq stationReq) {
         try {
             SaveStationRes saveStationRes = stationService.createStation(stationReq);
@@ -31,7 +32,7 @@ public class SubwayController {
         }
     }
 
-    @GetMapping("/stations")
+    @GetMapping
     public ResponseEntity<List<FindStationsRes>> findStations() {
         try {
             List<FindStationsRes> findStations = stationService.findStations();
@@ -41,7 +42,7 @@ public class SubwayController {
         }
     }
 
-    @DeleteMapping("/station/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteStation(@PathVariable Long id) {
         try {
             Long deleteId = stationService.deleteStation(id);

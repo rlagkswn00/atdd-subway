@@ -8,7 +8,7 @@ import static kuit.subway.utils.ExtractableResponseUtil.*;
 
 public class StationStep {
     public static ExtractableResponse<Response> 지하철_역_생성(SaveStationReq saveStationReq){
-        return post("/station", saveStationReq);
+        return post("/stations", saveStationReq);
     }
 
     public static  ExtractableResponse<Response> 지하철_역_조회(){
@@ -16,6 +16,6 @@ public class StationStep {
     }
 
     public static  ExtractableResponse<Response> 지하철_역_삭제(Long id){
-        return delete("/station/" + id);
+        return delete("/stations/" + id);
     }
 }
