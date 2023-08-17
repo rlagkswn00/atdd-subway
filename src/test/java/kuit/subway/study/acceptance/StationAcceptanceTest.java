@@ -21,22 +21,28 @@ public class StationAcceptanceTest extends AcceptanceTest {
     @DisplayName("역 생성 테스트")
     @Test
     void 지하철_역_생성_테스트() {
+        //given
+
+        //when - 역을 추가한다.
         ExtractableResponse<Response> extract = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
-        //200이면 정상 추가
-        Assertions.assertEquals(200, extract.statusCode());
+
+        //then - 201 정상 생성 HTTP Status 반환
+        Assertions.assertEquals(201, extract.statusCode());
     }
 
     @DisplayName("역 중복 생성 예외 테스트")
     @Test
     void 지하철_역_중복_생성_예외_테스트() {
         //given - 별내역 추가 상태
-        ExtractableResponse<Response> extract = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+        ExtractableResponse<Response> stationResponse = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
         //200이면 정상 추가
-        Assertions.assertEquals(200, extract.statusCode());
+        Assertions.assertEquals(201, stationResponse.statusCode());
 
-        ExtractableResponse<Response> extract2 = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
-        //200이면 정상 추가
-        Assertions.assertEquals(400, extract2.statusCode());
+        //when - 똑같은 이름의 "별내역" 추가
+        ExtractableResponse<Response> stationDuplicateResponse = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+
+        //then - BAD_REQUEST 400 에러 반환
+        Assertions.assertEquals(400, stationDuplicateResponse.statusCode());
     }
 
 
@@ -51,7 +57,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> extract = 지하철_역_조회();
         List<Object> responseList = extract.body().jsonPath().getList(".");
 
-        //then 정상 코드 반환, 2개의 역 조회 되어야 함.
+        //then - 정상 코드 반환, 2개의 역 조회 되어야 함.
         Assertions.assertEquals(200, extract.statusCode());
         assertThat(responseList).extracting("name").contains("별내역", "별내별가람역");
     }
@@ -64,7 +70,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         //when - 역 조회 시도
         ExtractableResponse<Response> extract = 지하철_역_조회();
 
-        //then HTTP Status Code 400 반환
+        //then - HTTP Status Code 400 반환
         Assertions.assertEquals(400, extract.statusCode());
     }
 
@@ -78,7 +84,7 @@ public class StationAcceptanceTest extends AcceptanceTest {
         //when - 역 삭제
         ExtractableResponse<Response> extract = 지하철_역_삭제(1L);
 
-        //then 정상 코드 반환
+        //then - 정상 코드 반환
         Assertions.assertEquals(200, extract.statusCode());
     }
 

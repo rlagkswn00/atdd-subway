@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @Controller
@@ -26,7 +27,7 @@ public class SubwayController {
     public ResponseEntity<SaveStationRes> createStation(@RequestBody SaveStationReq stationReq) {
         try {
             SaveStationRes saveStationRes = stationService.createStation(stationReq);
-            return ResponseEntity.ok(saveStationRes);
+            return ResponseEntity.created(URI.create("/stations/" + saveStationRes.getId())).body(saveStationRes);
         } catch (DuplicateException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
