@@ -19,7 +19,8 @@ public class AcceptanceTest {
 
     @BeforeEach
     public void setUp() {
-        RestAssured.port = 443;
+        // Test port 설정
+        RestAssured.port = port;
         databaseCleanup.execute();
     }
 }
