@@ -11,6 +11,7 @@ import kuit.subway.utils.ExtractableResponseUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 
 import java.util.HashMap;
@@ -30,6 +31,19 @@ public class StationAcceptanceTest extends AcceptanceTest {
         ExtractableResponse<Response> extract = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
         //200이면 정상 추가
         Assertions.assertEquals(200, extract.statusCode());
+    }
+
+    @DisplayName("역 중복 생성 예외 테스트")
+    @Test
+    void 지하철_역_중복_생성_예외_테스트() {
+        //given - 별내역 추가 상태
+        ExtractableResponse<Response> extract = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+        //200이면 정상 추가
+        Assertions.assertEquals(200, extract.statusCode());
+
+        ExtractableResponse<Response> extract2 = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+        //200이면 정상 추가
+        Assertions.assertEquals(400, extract2.statusCode());
     }
 
     private ExtractableResponse<Response> 지하철_역_생성(SaveStationReq saveStationReq){
@@ -52,6 +66,18 @@ public class StationAcceptanceTest extends AcceptanceTest {
         assertThat(responseList).extracting("name").contains("별내역","별내별가람역");
     }
 
+    @DisplayName("역 없을 시 조회 예외 테스트")
+    @Test
+    void 지하철_역_조회_예외_테스트() {
+        //given - 역이 생성되지 않음
+
+        //when - 역 조회 시도
+        ExtractableResponse<Response> extract = 지하철_역_조회();
+
+        //then HTTP Status Code 400 반환
+        Assertions.assertEquals(400, extract.statusCode());
+    }
+
     private ExtractableResponse<Response> 지하철_역_조회(){
         return get("/stations");
     }
@@ -68,6 +94,18 @@ public class StationAcceptanceTest extends AcceptanceTest {
 
         //then 정상 코드 반환
         Assertions.assertEquals(200, extract.statusCode());
+    }
+
+    @DisplayName("미존재 역 삭제 예외 테스트")
+    @Test
+    void 지하철_역_삭제_예외_테스트() {
+        //given - 역 생성되지 않음
+
+        //when - 역 삭제
+        ExtractableResponse<Response> extract = 지하철_역_삭제(1L);
+
+        //then - 400 에러 코드 발생
+        Assertions.assertEquals(400, extract.statusCode());
     }
 
     private ExtractableResponse<Response> 지하철_역_삭제(Long id){
