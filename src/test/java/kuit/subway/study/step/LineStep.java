@@ -12,4 +12,8 @@ public class LineStep {
     public static ExtractableResponse<Response> 지하철_라인_생성(SaveLineReq saveLineReq){
         return post(PATH, saveLineReq);
     }
+
+    public static ExtractableResponse<Response> 지하철_라인_조희(Long lineId){
+        return get(PATH + "/" + lineId);
+    }
 }
