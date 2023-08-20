@@ -1,9 +1,6 @@
 package kuit.subway.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import kuit.subway.dto.SaveLineReq;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
