@@ -1,4 +1,4 @@
-package kuit.subway.study;
+package kuit.subway.study.fixture;
 
 import kuit.subway.dto.SaveStationReq;
 
