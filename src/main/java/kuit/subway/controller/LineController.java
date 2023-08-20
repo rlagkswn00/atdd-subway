@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,8 +28,14 @@ public class LineController {
         return ResponseEntity.created(URI.create("/lines/" + saveLineRes.getId())).body(saveLineRes);
     }
 
+    @GetMapping
+    public ResponseEntity<List<FindLinesRes>> findAllLines(){
+        List<FindLinesRes> allLines = lineService.findAllLines();
+        return ResponseEntity.ok(allLines);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<FindLinesRes> findLines(@PathVariable Long id){
+    public ResponseEntity<FindLinesRes> findLines(@PathVariable Long id) {
         FindLinesRes findLinesRes = lineService.findLines(id);
         return ResponseEntity.ok(findLinesRes);
     }

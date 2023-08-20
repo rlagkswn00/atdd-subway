@@ -49,6 +49,38 @@ public class LineServiceImpl implements LineService{
     public FindLinesRes findLines(Long id) {
         Line line = lineRepository.findById(id).get();
 
+        List<FindStationsRes> stationList = getStationInfoList(line);
+
+        return FindLinesRes.builder()
+                .id(id)
+                .stations(stationList)
+                .name(line.getName())
+                .color(line.getColor())
+                .createdDate(line.getCreatedDate())
+                .modifiedDate(line.getModifiedDate())
+                .build();
+    }
+
+    @Override
+    public List<FindLinesRes> findAllLines() {
+        List<FindLinesRes> findLinesResList = new ArrayList<>();
+        List<Line> allLines = lineRepository.findAll();
+        for (Line line : allLines) {
+            List<FindStationsRes> stationInfoList = getStationInfoList(line);
+            findLinesResList.add(FindLinesRes.builder()
+                    .id(line.getId())
+                    .stations(stationInfoList)
+                    .name(line.getName())
+                    .color(line.getColor())
+                    .createdDate(line.getCreatedDate())
+                    .modifiedDate(line.getModifiedDate())
+                    .build());
+        }
+
+        return findLinesResList;
+    }
+
+    private List<FindStationsRes> getStationInfoList(Line line){
         Long upStationId = line.getUpStationId();
         Station upStation = stationRepository.findById(upStationId).get();
 
@@ -59,13 +91,6 @@ public class LineServiceImpl implements LineService{
         stationList.add(new FindStationsRes(upStationId, upStation.getName()));
         stationList.add(new FindStationsRes(downStationId, downStation.getName()));
 
-        return FindLinesRes.builder()
-                .id(id)
-                .stations(stationList)
-                .name(line.getName())
-                .color(line.getColor())
-                .createdDate(line.getCreatedDate())
-                .modifiedDate(line.getModifiedDate())
-                .build();
+        return stationList;
     }
 }
