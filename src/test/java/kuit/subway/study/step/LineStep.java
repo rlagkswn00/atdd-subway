@@ -16,4 +16,8 @@ public class LineStep {
     public static ExtractableResponse<Response> 지하철_라인_조희(Long lineId){
         return get(PATH + "/" + lineId);
     }
+
+    public static ExtractableResponse<Response> 지하철_라인_목록_조회(){
+        return get(PATH);
+    }
 }
