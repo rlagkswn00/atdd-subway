@@ -1,8 +1,7 @@
 package kuit.subway.controller;
 
-import kuit.subway.dto.FindStationsRes;
-import kuit.subway.dto.SaveStationReq;
-import kuit.subway.dto.SaveStationRes;
+import kuit.subway.dto.*;
+import kuit.subway.service.LineService;
 import kuit.subway.service.StationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/stations")
-public class SubwayController {
+public class StationController {
     private final StationService stationService;
 
     @PostMapping
