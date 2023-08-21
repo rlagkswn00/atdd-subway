@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import static kuit.global.BaseResponseStatus.*;
 import static kuit.global.BaseResponseStatus.DUPLICATE_STATION;
 import static kuit.global.BaseResponseStatus.NOT_EXIST_STATION;
+import static kuit.subway.study.fixture.LineFixture.라인_수정_픽스처;
 import static kuit.subway.study.fixture.LineFixture.라인_픽스처;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.LineStep.*;
@@ -95,16 +96,32 @@ public class ExceptionAcceptanceClass extends AcceptanceTest {
                 .isEqualTo(NOT_EXIST_LINE.getHttpStatus().value());
     }
 
-        @DisplayName("미존재 라인 삭제 예외 테스트")
-        @Test
-        void 지하철_라인_삭제_예외_테스트() {
-            //given - 라인 미존재
+    @DisplayName("미존재 라인 삭제 예외 테스트")
+    @Test
+    void 지하철_라인_삭제_예외_테스트() {
+        //given - 라인 미존재
 
-            //when - ID값 1번 라인 삭제
-            ExtractableResponse<Response> response = 지하철_라인_삭제(1L);
+        //when - ID값 1번 라인 삭제
+        ExtractableResponse<Response> response = 지하철_라인_삭제(1L);
 
-            //then - BAD_REQUEST 400 에러 반환
-            assertThat(response.statusCode())
+        //then - BAD_REQUEST 400 에러 반환
+        assertThat(response.statusCode())
                 .isEqualTo(NOT_EXIST_LINE.getHttpStatus().value());
+    }
+
+
+    @DisplayName("미존재 라인 수정 예외 테스트")
+    @Test
+    void 지하철_라인_수정_예외_테스트() {
+        //given - 라인 미존재
+
+        //when - 지하철 노선 수정
+        ExtractableResponse<Response> response = 지하철_라인_수정(1L,
+                라인_수정_픽스처("green", 33L, "4호선", 2L, 1L));
+
+        //then - BAD REQUEST 400 에러 반환
+        assertThat(response.statusCode())
+                .isEqualTo(HttpStatus.BAD_REQUEST.value());
+
     }
 }
