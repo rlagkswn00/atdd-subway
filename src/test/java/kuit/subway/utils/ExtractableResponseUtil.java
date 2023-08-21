@@ -39,6 +39,4 @@ public class ExtractableResponseUtil {
                 .then().log().all()
                 .extract();
     }
-
-
 }

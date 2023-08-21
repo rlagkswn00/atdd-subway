@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static kuit.global.BaseResponseStatus.DUPLICATE_STATION;
-import static kuit.global.BaseResponseStatus.NOT_EXIST_STATION;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.StationStep.*;
 import static org.assertj.core.api.Assertions.*;
@@ -59,4 +57,5 @@ public class StationAcceptanceTest extends AcceptanceTest {
         //then - 정상 코드 반환
         Assertions.assertEquals(OK.value(), extract.statusCode());
     }
+
 }
