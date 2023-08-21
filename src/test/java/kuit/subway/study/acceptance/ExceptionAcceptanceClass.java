@@ -2,19 +2,24 @@ package kuit.subway.study.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import kuit.global.BaseResponseStatus;
 import kuit.subway.AcceptanceTest;
 import kuit.subway.dto.SaveLineReq;
 import kuit.subway.study.fixture.LineFixture;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
+import static kuit.global.BaseResponseStatus.*;
 import static kuit.global.BaseResponseStatus.DUPLICATE_STATION;
 import static kuit.global.BaseResponseStatus.NOT_EXIST_STATION;
 import static kuit.subway.study.fixture.LineFixture.라인_픽스처;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.LineStep.지하철_라인_생성;
+import static kuit.subway.study.step.LineStep.지하철_라인_조희;
 import static kuit.subway.study.step.StationStep.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 
 public class ExceptionAcceptanceClass extends AcceptanceTest {
@@ -71,5 +76,18 @@ public class ExceptionAcceptanceClass extends AcceptanceTest {
 
         //then - BAD_REQUEST 400 에러 반환
         Assertions.assertEquals(DUPLICATE_STATION.getHttpStatus().value(), stationDuplicateResponse.statusCode());
+    }
+
+    @DisplayName("미존재 라인 조회 예외 테스트")
+    @Test
+    void 지하철_라인_조회_예외_테스트() {
+        //given - 라인 미존재
+
+        //when - ID값 1번 라인 조회
+        ExtractableResponse<Response> response = 지하철_라인_조희(1L);
+
+        //then - BAD_REQUEST 400 에러 반환
+        assertThat(response.statusCode())
+                .isEqualTo(NOT_EXIST_LINE.getHttpStatus().value());
     }
 }
