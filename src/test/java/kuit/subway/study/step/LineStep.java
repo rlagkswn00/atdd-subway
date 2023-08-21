@@ -4,8 +4,7 @@ import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.dto.SaveLineReq;
 
-import static kuit.subway.utils.ExtractableResponseUtil.get;
-import static kuit.subway.utils.ExtractableResponseUtil.post;
+import static kuit.subway.utils.ExtractableResponseUtil.*;
 
 public class LineStep {
     private final static String PATH = "/lines";
@@ -20,4 +19,9 @@ public class LineStep {
     public static ExtractableResponse<Response> 지하철_라인_목록_조회(){
         return get(PATH);
     }
+
+    public static ExtractableResponse<Response> 지하철_라인_삭제(Long id){
+        return delete(PATH + "/" + id);
+    }
+
 }
