@@ -17,7 +17,8 @@ public enum BaseResponseStatus {
     NOT_EXIST_STATION(HttpStatus.BAD_REQUEST, "역이 존재하지 않습니다."),
 
     DUPLICATE_LINE(HttpStatus.BAD_REQUEST, "중복된 라인 입니다."),
-    NOT_EXIST_LINE(HttpStatus.BAD_REQUEST, "라인이 존재하지 않습니다.");
+    NOT_EXIST_LINE(HttpStatus.BAD_REQUEST, "라인이 존재하지 않습니다."),
+    SAME_UP_DOWN_STATION(HttpStatus.BAD_REQUEST, "상행역과 하행역의 ID가 동일합니다.");
 
 
     private final HttpStatus httpStatus;
