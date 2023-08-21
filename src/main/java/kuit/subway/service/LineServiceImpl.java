@@ -84,6 +84,15 @@ public class LineServiceImpl implements LineService{
         return findLinesResList;
     }
 
+    @Override
+    public Long deleteLine(Long id) {
+        if(!lineRepository.existsById(id))
+            throw new SubwayException(BaseResponseStatus.NOT_EXIST_LINE);
+
+        lineRepository.deleteById(id);
+        return id;
+    }
+
     private List<FindStationsRes> getStationInfoList(Line line){
         Station upStation = line.getUpStation();
         Station downStation = line.getDownStation();

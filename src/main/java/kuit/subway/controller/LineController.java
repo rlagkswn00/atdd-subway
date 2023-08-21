@@ -39,4 +39,10 @@ public class LineController {
         FindLinesRes findLinesRes = lineService.findLines(id);
         return ResponseEntity.ok(findLinesRes);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteLine(@PathVariable Long id) {
+        Long deleteId = lineService.deleteLine(id);
+        return ResponseEntity.ok(deleteId);
+    }
 }

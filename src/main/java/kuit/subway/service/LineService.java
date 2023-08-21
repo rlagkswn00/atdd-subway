@@ -11,4 +11,7 @@ public interface LineService {
     FindLinesRes findLines(Long id);
 
     List<FindLinesRes> findAllLines();
+
+    Long deleteLine(Long id);
+
 }
