@@ -66,16 +66,20 @@ public class ExceptionAcceptanceClass extends AcceptanceTest {
     @DisplayName("라인 중복 생성 예외 테스트")
     @Test
     void 지하철_라인_중복_생성_예외_테스트() {
-        //given - 별내역 추가 상태
-        ExtractableResponse<Response> stationResponse = 지하철_라인_생성(라인_픽스처("green",22L,"4호선",1L,2L));
-        //200이면 정상 추가
-        Assertions.assertEquals(CREATED.value(), stationResponse.statusCode());
+        //given - 4호선 추가
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
+        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
 
-        //when - 똑같은 이름의 "별내역" 추가
-        ExtractableResponse<Response> stationDuplicateResponse = 지하철_역_생성(지하철_역_생성_픽스처("별내역"));
+        //when - 4호선 중복 추가
+        지하철_역_생성(지하철_역_생성_픽스처("도봉산역"));
+        지하철_역_생성(지하철_역_생성_픽스처("온수역"));
+
+
+        ExtractableResponse<Response> lineDuplicateResponse = 지하철_라인_생성(라인_픽스처("khaki", 25L, "4호선", 3L, 4L));
 
         //then - BAD_REQUEST 400 에러 반환
-        Assertions.assertEquals(DUPLICATE_STATION.getHttpStatus().value(), stationDuplicateResponse.statusCode());
+        Assertions.assertEquals(DUPLICATE_STATION.getHttpStatus().value(), lineDuplicateResponse.statusCode());
     }
 
     @DisplayName("미존재 라인 조회 예외 테스트")
