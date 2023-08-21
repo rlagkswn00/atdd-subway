@@ -2,15 +2,10 @@ package kuit.subway.study.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import kuit.global.BaseResponseStatus;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.dto.SaveLineReq;
-import kuit.subway.study.fixture.LineFixture;
-import kuit.subway.study.step.LineStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import static kuit.global.BaseResponseStatus.*;
 import static kuit.global.BaseResponseStatus.DUPLICATE_STATION;
@@ -23,7 +18,7 @@ import static kuit.subway.study.step.StationStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 
-public class ExceptionAcceptanceClass extends AcceptanceTest {
+public class ExceptionAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("역 중복 생성 예외 테스트")
     @Test
