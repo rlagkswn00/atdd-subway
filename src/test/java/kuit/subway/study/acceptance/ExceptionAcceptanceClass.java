@@ -121,7 +121,37 @@ public class ExceptionAcceptanceClass extends AcceptanceTest {
 
         //then - BAD REQUEST 400 에러 반환
         assertThat(response.statusCode())
-                .isEqualTo(HttpStatus.BAD_REQUEST.value());
+                .isEqualTo(NOT_EXIST_LINE.getHttpStatus().value());
 
     }
+
+    @DisplayName("라인 생성 시 미존재 역 설정 예외 테스트")
+    @Test
+    void 지하철_라인_미존재역_예외_테스트() {
+        //given - 역 미존재
+
+        //when - 지하철 라인 생성
+        ExtractableResponse<Response> response = 지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+
+        //then - BAD_REUQEST 400 반환
+        assertThat(response.statusCode())
+                .isEqualTo(NOT_EXIST_STATION.getHttpStatus().value());
+
+    }
+
+    @DisplayName("라인 생성 시 상행역과 하행역 동일 ID 설정 예외 테스트")
+    @Test
+    void 지하철_라인_동일역_예외_테스트() {
+        //given - 역 1개 생성
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+
+        //when - 상행역 ID와 하행역 ID 동일하게 설정하여 생성 ㅇ시도
+        ExtractableResponse<Response> response = 지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 1L));
+
+        //then - BAD_REQEUST 400 반환
+        assertThat(response.statusCode())
+                .isEqualTo(SAME_UP_DOWN_STATION.getHttpStatus().value());
+
+    }
+
 }
