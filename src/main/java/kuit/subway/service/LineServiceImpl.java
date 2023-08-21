@@ -1,6 +1,5 @@
 package kuit.subway.service;
 
-import jakarta.transaction.Transactional;
 import kuit.global.BaseResponseStatus;
 import kuit.global.exception.SubwayException;
 import kuit.subway.domain.Line;
@@ -12,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +49,7 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public FindLinesRes findLines(Long id) {
         if (!lineRepository.existsById(id))
             throw new SubwayException(NOT_EXIST_LINE);
@@ -68,6 +69,7 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<FindLinesRes> findAllLines() {
         List<FindLinesRes> findLinesResList = new ArrayList<>();
         List<Line> allLines = lineRepository.findAll();
@@ -116,11 +118,11 @@ public class LineServiceImpl implements LineService {
         Station upStation = line.getUpStation();
         Station downStation = line.getDownStation();
 
-        List<FindStationsRes> stationList = new ArrayList<>();
-        stationList.add(new FindStationsRes(upStation.getId(), upStation.getName()));
-        stationList.add(new FindStationsRes(downStation.getId(), downStation.getName()));
+        List<FindStationsRes> stations = new ArrayList<>();
+        stations.add(new FindStationsRes(upStation.getId(), upStation.getName()));
+        stations.add(new FindStationsRes(downStation.getId(), downStation.getName()));
 
-        return stationList;
+        return stations ;
     }
     private void validateUpstationAndDownStation(Long upStationId, Long downStationId){
         if(!stationRepository.existsById(upStationId) || !stationRepository.existsById(downStationId))

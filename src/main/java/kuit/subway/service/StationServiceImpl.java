@@ -1,6 +1,5 @@
 package kuit.subway.service;
 
-import jakarta.transaction.Transactional;
 import kuit.global.exception.SubwayException;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.FindStationsRes;
@@ -10,6 +9,7 @@ import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -35,6 +35,7 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<FindStationsRes> findStations() {
 
         List<FindStationsRes> stations = stationRepository.findAll().stream()
