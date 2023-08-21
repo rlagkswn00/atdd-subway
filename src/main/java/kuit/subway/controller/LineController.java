@@ -4,6 +4,7 @@ package kuit.subway.controller;
 import kuit.subway.dto.FindLinesRes;
 import kuit.subway.dto.SaveLineReq;
 import kuit.subway.dto.SaveLineRes;
+import kuit.subway.dto.UpdateLineReq;
 import kuit.subway.service.LineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,5 +45,11 @@ public class LineController {
     public ResponseEntity<Long> deleteLine(@PathVariable Long id) {
         Long deleteId = lineService.deleteLine(id);
         return ResponseEntity.ok(deleteId);
+    }
+
+    @PostMapping("/{id}")
+    public ResponseEntity<Long> updateLine(@PathVariable Long id, @RequestBody UpdateLineReq updateLineReq) {
+        Long responseId = lineService.updateLine(id,updateLineReq);
+        return ResponseEntity.ok(responseId);
     }
 }

@@ -5,32 +5,33 @@ import kuit.global.BaseResponseStatus;
 import kuit.global.exception.SubwayException;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Station;
-import kuit.subway.dto.FindLinesRes;
-import kuit.subway.dto.FindStationsRes;
-import kuit.subway.dto.SaveLineReq;
-import kuit.subway.dto.SaveLineRes;
+import kuit.subway.dto.*;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static kuit.global.BaseResponseStatus.DUPLICATE_LINE;
+import static kuit.global.BaseResponseStatus.NOT_EXIST_LINE;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
-public class LineServiceImpl implements LineService{
+public class LineServiceImpl implements LineService {
 
     private final LineRepository lineRepository;
     private final StationRepository stationRepository;
 
     @Override
     public SaveLineRes createLines(SaveLineReq saveLineReq) {
-        if(lineRepository.existsLineByName(saveLineReq.getName()))
-            throw new SubwayException(BaseResponseStatus.DUPLICATE_LINE);
+        if (lineRepository.existsLineByName(saveLineReq.getName()))
+            throw new SubwayException(DUPLICATE_LINE);
         Station upStation = stationRepository.findById(saveLineReq.getUpStationId()).get();
         Station downStation = stationRepository.findById(saveLineReq.getDownStationId()).get();
 
@@ -48,8 +49,8 @@ public class LineServiceImpl implements LineService{
 
     @Override
     public FindLinesRes findLines(Long id) {
-        if(!lineRepository.existsById(id))
-            throw new SubwayException(BaseResponseStatus.NOT_EXIST_LINE);
+        if (!lineRepository.existsById(id))
+            throw new SubwayException(NOT_EXIST_LINE);
 
         Line line = lineRepository.findById(id).get();
 
@@ -86,14 +87,29 @@ public class LineServiceImpl implements LineService{
 
     @Override
     public Long deleteLine(Long id) {
-        if(!lineRepository.existsById(id))
-            throw new SubwayException(BaseResponseStatus.NOT_EXIST_LINE);
+        if (!lineRepository.existsById(id))
+            throw new SubwayException(NOT_EXIST_LINE);
 
         lineRepository.deleteById(id);
         return id;
     }
 
-    private List<FindStationsRes> getStationInfoList(Line line){
+    @Override
+    public Long updateLine(Long id, UpdateLineReq updateLineReq) {
+        if (!lineRepository.existsById(id))
+            throw new SubwayException(NOT_EXIST_LINE);
+
+        Line line = lineRepository.findById(id).get();
+
+        Station upStation = stationRepository.findById(updateLineReq.getUpStationId()).get();
+        Station downStation = stationRepository.findById(updateLineReq.getDownStationId()).get();
+
+        line.updateLine(updateLineReq, upStation, downStation);
+
+        return id;
+    }
+
+    private List<FindStationsRes> getStationInfoList(Line line) {
         Station upStation = line.getUpStation();
         Station downStation = line.getDownStation();
 
