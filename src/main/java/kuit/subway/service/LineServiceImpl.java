@@ -48,6 +48,9 @@ public class LineServiceImpl implements LineService{
 
     @Override
     public FindLinesRes findLines(Long id) {
+        if(!lineRepository.existsById(id))
+            throw new SubwayException(BaseResponseStatus.NOT_EXIST_LINE);
+
         Line line = lineRepository.findById(id).get();
 
         List<FindStationsRes> stationList = getStationInfoList(line);
