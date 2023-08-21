@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import static kuit.global.BaseResponseStatus.DUPLICATE_LINE;
-import static kuit.global.BaseResponseStatus.NOT_EXIST_LINE;
+import static kuit.global.BaseResponseStatus.*;
 
 @Service
 @Transactional
@@ -30,6 +29,8 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public SaveLineRes createLines(SaveLineReq saveLineReq) {
+        validateUpstationAndDownStation(saveLineReq.getUpStationId(), saveLineReq.getDownStationId());
+
         if (lineRepository.existsLineByName(saveLineReq.getName()))
             throw new SubwayException(DUPLICATE_LINE);
         Station upStation = stationRepository.findById(saveLineReq.getUpStationId()).get();
@@ -96,6 +97,8 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public Long updateLine(Long id, UpdateLineReq updateLineReq) {
+        validateUpstationAndDownStation(updateLineReq.getUpStationId(), updateLineReq.getDownStationId());
+
         if (!lineRepository.existsById(id))
             throw new SubwayException(NOT_EXIST_LINE);
 
@@ -118,5 +121,12 @@ public class LineServiceImpl implements LineService {
         stationList.add(new FindStationsRes(downStation.getId(), downStation.getName()));
 
         return stationList;
+    }
+    private void validateUpstationAndDownStation(Long upStationId, Long downStationId){
+        if(!stationRepository.existsById(upStationId) || !stationRepository.existsById(downStationId))
+            throw new SubwayException(NOT_EXIST_STATION);
+
+        if(upStationId.equals(downStationId))
+            throw new SubwayException(SAME_UP_DOWN_STATION);
     }
 }
