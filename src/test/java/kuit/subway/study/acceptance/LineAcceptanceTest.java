@@ -10,6 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
+import static kuit.subway.study.fixture.LineFixture.라인_수정_픽스처;
 import static kuit.subway.study.fixture.LineFixture.라인_픽스처;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.LineStep.*;
@@ -72,7 +73,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
     @DisplayName("지하철 노선 삭제 테스트")
     @Test
-    public void 지하철_노선_삭제_테스트() throws Exception{
+    public void 지하철_노선_삭제_테스트() throws Exception {
         //given - 2개 역, 1개 노선 생성
         지하철_역_생성(지하철_역_생성_픽스처("진접역"));
         지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
@@ -85,5 +86,22 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode())
                 .isEqualTo(HttpStatus.OK.value());
 
+    }
+
+    @DisplayName("지하철 노선 수정 테스트")
+    @Test
+    public void 지하철_노선_수정_테스트() throws Exception {
+        //given - 2개 역, 1개 노선 생성
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
+        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+
+        //when - 지하철 노선 수정
+        ExtractableResponse<Response> response = 지하철_라인_수정(1L,
+                라인_수정_픽스처("green", 33L, "4호선", 2L, 1L));
+
+        //then - 200 정상 코드 반환
+        assertThat(response.statusCode())
+                .isEqualTo(HttpStatus.OK.value());
     }
 }
