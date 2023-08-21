@@ -69,4 +69,21 @@ public class LineAcceptanceTest extends AcceptanceTest {
         assertThat(response.statusCode())
                 .isEqualTo(HttpStatus.OK.value());
     }
+
+    @DisplayName("지하철 노선 삭제 테스트")
+    @Test
+    public void 지하철_노선_삭제_테스트() throws Exception{
+        //given - 2개 역, 1개 노선 생성
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
+        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+
+        //when - 지하철 노선 삭제
+        ExtractableResponse<Response> response = 지하철_라인_삭제(1L);
+
+        //then
+        assertThat(response.statusCode())
+                .isEqualTo(HttpStatus.OK.value());
+
+    }
 }
