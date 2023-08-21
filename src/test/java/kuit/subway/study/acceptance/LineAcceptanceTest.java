@@ -3,15 +3,12 @@ package kuit.subway.study.acceptance;
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.dto.SaveLineReq;
-import kuit.subway.study.fixture.LineFixture;
-import kuit.subway.study.step.LineStep;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
 import static kuit.subway.study.fixture.LineFixture.라인_수정_픽스처;
-import static kuit.subway.study.fixture.LineFixture.라인_픽스처;
+import static kuit.subway.study.fixture.LineFixture.라인_생성_픽스처;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.LineStep.*;
 import static kuit.subway.study.step.StationStep.지하철_역_생성;
@@ -28,7 +25,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
 
         //when
-        ExtractableResponse<Response> response = 지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+        ExtractableResponse<Response> response = 지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 2L));
 
         //then -
         assertThat(response.statusCode())
@@ -41,7 +38,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         //given - 상행 종점 진접역, 하행 종점 오이도역 생성 및 1개 라인 생성
         지하철_역_생성(지하철_역_생성_픽스처("진접역"));
         지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
-        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+        지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 2L));
 
         //when - 라인 조회
         ExtractableResponse<Response> response = 지하철_라인_조희(1L);
@@ -57,11 +54,11 @@ public class LineAcceptanceTest extends AcceptanceTest {
         //given - 노선 두개 생성
         지하철_역_생성(지하철_역_생성_픽스처("진접역"));
         지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
-        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+        지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 2L));
 
         지하철_역_생성(지하철_역_생성_픽스처("도봉산역"));
         지하철_역_생성(지하철_역_생성_픽스처("온수역"));
-        지하철_라인_생성(라인_픽스처("khaki", 25L, "7호선", 3L, 4L));
+        지하철_라인_생성(라인_생성_픽스처("khaki", 25L, "7호선", 3L, 4L));
 
         //when
         ExtractableResponse<Response> response = 지하철_라인_목록_조회();
@@ -77,7 +74,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         //given - 2개 역, 1개 노선 생성
         지하철_역_생성(지하철_역_생성_픽스처("진접역"));
         지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
-        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+        지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 2L));
 
         //when - 지하철 노선 삭제
         ExtractableResponse<Response> response = 지하철_라인_삭제(1L);
@@ -94,7 +91,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
         //given - 2개 역, 1개 노선 생성
         지하철_역_생성(지하철_역_생성_픽스처("진접역"));
         지하철_역_생성(지하철_역_생성_픽스처("오이도역"));
-        지하철_라인_생성(라인_픽스처("green", 22L, "4호선", 1L, 2L));
+        지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 2L));
 
         //when - 지하철 노선 수정
         ExtractableResponse<Response> response = 지하철_라인_수정(1L,
