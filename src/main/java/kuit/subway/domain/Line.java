@@ -21,15 +21,12 @@ public class Line extends BaseEntity{
     private Long distance;
     private String name;
 
-    private Long downStationId;
-    private Long upStationId;
+    @ManyToOne
+    @JoinColumn(name = "down_station_id")
+    private Station downStation;
 
+    @ManyToOne
+    @JoinColumn(name = "up_station_id")
+    private Station upStation;
 
-    public Line(SaveLineReq saveLineReq){
-        this.color = saveLineReq.getColor();
-        this.distance = saveLineReq.getDistance();
-        this.name = saveLineReq.getName();
-        this.downStationId = saveLineReq.getDownStationId();
-        this.upStationId = saveLineReq.getUpStationId();
-    }
 }

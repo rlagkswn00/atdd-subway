@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,12 +31,14 @@ public class LineServiceImpl implements LineService{
     public SaveLineRes createLines(SaveLineReq saveLineReq) {
         if(lineRepository.existsLineByName(saveLineReq.getName()))
             throw new SubwayException(BaseResponseStatus.DUPLICATE_LINE);
+        Station upStation = stationRepository.findById(saveLineReq.getUpStationId()).get();
+        Station downStation = stationRepository.findById(saveLineReq.getDownStationId()).get();
 
         Line line = Line.builder()
                 .name(saveLineReq.getName())
                 .color(saveLineReq.getColor())
-                .downStationId(saveLineReq.getDownStationId())
-                .upStationId(saveLineReq.getUpStationId())
+                .downStation(downStation)
+                .upStation(upStation)
                 .distance(saveLineReq.getDistance())
                 .build();
 
@@ -81,15 +82,12 @@ public class LineServiceImpl implements LineService{
     }
 
     private List<FindStationsRes> getStationInfoList(Line line){
-        Long upStationId = line.getUpStationId();
-        Station upStation = stationRepository.findById(upStationId).get();
-
-        Long downStationId = line.getDownStationId();
-        Station downStation = stationRepository.findById(downStationId).get();
+        Station upStation = line.getUpStation();
+        Station downStation = line.getDownStation();
 
         List<FindStationsRes> stationList = new ArrayList<>();
-        stationList.add(new FindStationsRes(upStationId, upStation.getName()));
-        stationList.add(new FindStationsRes(downStationId, downStation.getName()));
+        stationList.add(new FindStationsRes(upStation.getId(), upStation.getName()));
+        stationList.add(new FindStationsRes(downStation.getId(), downStation.getName()));
 
         return stationList;
     }
