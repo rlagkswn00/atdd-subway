@@ -16,7 +16,8 @@ public enum BaseResponseStatus {
     DUPLICATE_STATION(HttpStatus.BAD_REQUEST, "중복된 역 입니다."),
     NOT_EXIST_STATION(HttpStatus.BAD_REQUEST, "역이 존재하지 않습니다."),
 
-    DUPLICATE_LINE(HttpStatus.BAD_REQUEST, "중복된 라인 입니다.");
+    DUPLICATE_LINE(HttpStatus.BAD_REQUEST, "중복된 라인 입니다."),
+    NOT_EXIST_LINE(HttpStatus.BAD_REQUEST, "라인이 존재하지 않습니다.");
 
 
     private final HttpStatus httpStatus;
