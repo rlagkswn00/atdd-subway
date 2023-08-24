@@ -19,8 +19,11 @@ public class Line extends BaseEntity{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String color;
+    @Column(nullable = false)
     private Long distance;
+    @Column(nullable = false)
     private String name;
 
     @ManyToOne
