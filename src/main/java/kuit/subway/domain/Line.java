@@ -37,6 +37,10 @@ public class Line extends BaseEntity {
         this.sections.addSection(section);
     }
 
+    public void removeSection() {
+        sections.removeSection();
+    }
+
     public void updateLine(UpdateLineReq updateLineReq) {
         this.name = updateLineReq.getName();
         this.color = updateLineReq.getColor();

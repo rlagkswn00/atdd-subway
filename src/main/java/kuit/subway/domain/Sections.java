@@ -22,6 +22,10 @@ public class Sections {
         this.sections.add(section);
     }
 
+    public void removeSection() {
+        this.sections.remove(sections.size()-1);
+    }
+
     public List<Station> getStations() {
         List<Station> stations = new ArrayList<>();
         boolean isFirst = true;
