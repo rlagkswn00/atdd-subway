@@ -2,13 +2,10 @@ package kuit.subway.study.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
-import kuit.global.BaseResponseStatus;
 import kuit.subway.AcceptanceTest;
-import kuit.subway.study.step.SectionStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 import static kuit.global.BaseResponseStatus.*;
 import static kuit.global.BaseResponseStatus.DUPLICATE_STATION;
@@ -22,7 +19,6 @@ import static kuit.subway.study.step.SectionStep.지하철_구간_삭제;
 import static kuit.subway.study.step.SectionStep.지하철_구간_생성;
 import static kuit.subway.study.step.StationStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
 public class ExceptionAcceptanceTest extends AcceptanceTest {

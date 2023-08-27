@@ -9,7 +9,6 @@ import kuit.subway.domain.Station;
 import kuit.subway.dto.*;
 import kuit.subway.repository.LineRepository;
 import kuit.subway.repository.StationRepository;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,6 +29,7 @@ public class LineServiceImpl implements LineService {
     private final LineRepository lineRepository;
     private final StationRepository stationRepository;
 
+    @Override
     public SaveLineRes createLines(SaveLineReq saveLineReq) {
         validateUpstationAndDownStation(saveLineReq.getUpStationId(), saveLineReq.getDownStationId());
 
@@ -60,7 +60,6 @@ public class LineServiceImpl implements LineService {
     @Transactional(readOnly = true)
     public FindLinesRes findLines(Long id) {
         validateLine(id);
-
         Line line = lineRepository.findById(id).get();
 
         List<FindStationsRes> stationList = getStationInfoList(line);

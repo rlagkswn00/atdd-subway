@@ -9,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.sql.Update;
 
-import java.util.List;
-
 
 @Entity
 @Builder
