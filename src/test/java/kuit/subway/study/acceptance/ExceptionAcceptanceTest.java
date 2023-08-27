@@ -2,7 +2,9 @@ package kuit.subway.study.acceptance;
 
 import io.restassured.response.ExtractableResponse;
 import io.restassured.response.Response;
+import kuit.global.BaseResponseStatus;
 import kuit.subway.AcceptanceTest;
+import kuit.subway.study.step.SectionStep;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import static kuit.subway.study.fixture.LineFixture.라인_생성_픽스처;
 import static kuit.subway.study.fixture.SectionFixture.지하철_구간_생성_픽스처;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.LineStep.*;
+import static kuit.subway.study.step.SectionStep.지하철_구간_삭제;
 import static kuit.subway.study.step.SectionStep.지하철_구간_생성;
 import static kuit.subway.study.step.StationStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -132,7 +135,7 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
         //when - 지하철 라인 생성
         ExtractableResponse<Response> response = 지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 2L));
 
-        //then - BAD_REUQEST 400 반환
+        //then - BAD_REUQEST 404 반환
         assertThat(response.statusCode())
                 .isEqualTo(NOT_EXIST_STATION.getHttpStatus().value());
 
@@ -147,10 +150,9 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
         //when - 상행역 ID와 하행역 ID 동일하게 설정하여 생성 ㅇ시도
         ExtractableResponse<Response> response = 지하철_라인_생성(라인_생성_픽스처("green", 22L, "4호선", 1L, 1L));
 
-        //then - BAD_REQEUST 400 반환
+        //then - BAD_REQEUST 404 반환
         assertThat(response.statusCode())
                 .isEqualTo(SAME_UP_DOWN_STATION.getHttpStatus().value());
-
     }
 
     @DisplayName("구간 생성 시 동일역 추가 예외")
@@ -167,9 +169,9 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
         //1번 라인에 동일한 역으로 새 구간 추가
         ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(3L, 3L, 1L));
 
-        //then - 201 반환
+        //then - BAD_REQEUST 404 반환
         assertThat(response.statusCode())
-                .isEqualTo(BAD_REQUEST.value());
+                .isEqualTo(DUPLICATE_STATION.getHttpStatus().value());
 
     }
 
@@ -187,9 +189,9 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
         //1번 라인에 동일한 역으로 새 구간 추가
         ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(1L, 3L, 1L));
 
-        //then - 201 반환
+        //then - BAD_REQEUST 404 반환
         assertThat(response.statusCode())
-                .isEqualTo(BAD_REQUEST.value());
+                .isEqualTo(INVALID_UPSTATION_SECTION.getHttpStatus().value());
 
     }
     @DisplayName("구간 생성 시 미존재 라인에 추가 시 예외")
@@ -205,9 +207,9 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
         //1번 라인에 동일한 역으로 새 구간 추가
         ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(2L, 3L, 1L));
 
-        //then - 201 반환
+        //then - BAD_REQEUST 404 반환
         assertThat(response.statusCode())
-                .isEqualTo(BAD_REQUEST.value());
+                .isEqualTo(NOT_EXIST_LINE.getHttpStatus().value());
 
     }
 
@@ -224,11 +226,27 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
         //1번 라인에 동일한 역으로 새 구간 추가
         ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(2L, 1L, 1L));
 
-        //then - 201 반환
+        //then - BAD_REQEUST 404 반환
         assertThat(response.statusCode())
-                .isEqualTo(BAD_REQUEST.value());
+                .isEqualTo(DUPLICATE_STATION.getHttpStatus().value());
 
     }
 
+    @DisplayName("구간 삭제 시 구간이 하나뿐인 라인 삭제 불가 예외 테스트")
+    @Test
+    void 지하철_구간_삭제_구간개수_부족_예외_테스트() {
+        //given - 2개 역, 1개 노선 추가(구간 1개만 생성됨)
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오남역"));
+        지하철_라인_생성(라인_생성_픽스처("green", 2L, "4호선", 1L, 2L));
+
+        //when - 구간 추가하지 않고 삭제 시도
+        ExtractableResponse<Response> response = 지하철_구간_삭제(1L);
+
+        //then - 404
+        assertThat(response.statusCode())
+                .isEqualTo(ONLY_ONE_SECTION.getHttpStatus().value());
+
+    }
 
 }
