@@ -15,4 +15,6 @@ public interface LineService {
     Long updateLine(Long id, UpdateLineReq updateLineReq);
 
     SaveSectionRes createSections(SaveSectionReq saveSectionReq);
+
+    Long deleteSection(Long lineId);
 }
