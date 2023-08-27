@@ -14,8 +14,9 @@ public class SaveLineReq {
     private String color;
     private Long distance;
     private String name;
-    private Long downStationId;
     private Long upStationId;
+    private Long downStationId;
+
 
 
 
