@@ -6,16 +6,20 @@ import kuit.subway.AcceptanceTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 
 import static kuit.global.BaseResponseStatus.*;
 import static kuit.global.BaseResponseStatus.DUPLICATE_STATION;
 import static kuit.global.BaseResponseStatus.NOT_EXIST_STATION;
 import static kuit.subway.study.fixture.LineFixture.라인_수정_픽스처;
 import static kuit.subway.study.fixture.LineFixture.라인_생성_픽스처;
+import static kuit.subway.study.fixture.SectionFixture.지하철_구간_생성_픽스처;
 import static kuit.subway.study.fixture.StationFixture.지하철_역_생성_픽스처;
 import static kuit.subway.study.step.LineStep.*;
+import static kuit.subway.study.step.SectionStep.지하철_구간_생성;
 import static kuit.subway.study.step.StationStep.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 
 public class ExceptionAcceptanceTest extends AcceptanceTest {
@@ -148,5 +152,83 @@ public class ExceptionAcceptanceTest extends AcceptanceTest {
                 .isEqualTo(SAME_UP_DOWN_STATION.getHttpStatus().value());
 
     }
+
+    @DisplayName("구간 생성 시 동일역 추가 예외")
+    @Test
+    void 지하철_구간_동일역_구간_추가_에외_테스트() {
+        //given - 2개 역, 1개 노선 추가
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오남역"));
+        지하철_라인_생성(라인_생성_픽스처("green", 2L, "4호선", 1L, 2L));
+
+        //when - 1개 역 추가하고, upstation, downstation 동일하게 section 추가
+        지하철_역_생성(지하철_역_생성_픽스처("별내별가람역"));// ID : 3L
+
+        //1번 라인에 동일한 역으로 새 구간 추가
+        ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(3L, 3L, 1L));
+
+        //then - 201 반환
+        assertThat(response.statusCode())
+                .isEqualTo(BAD_REQUEST.value());
+
+    }
+
+    @DisplayName("구간 생성 시 라인 하행역과 구간 상행역 불일치 예외")
+    @Test
+    void 지하철_구간_라인하행역_구간상행역_불일치_테스트() {
+        //given - 2개 역, 1개 노선 추가
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오남역"));
+        지하철_라인_생성(라인_생성_픽스처("green", 2L, "4호선", 1L, 2L));
+
+        //when - 1개 역 추가하고, 상행역으로 1L 설정
+        지하철_역_생성(지하철_역_생성_픽스처("별내별가람역"));// ID : 3L
+
+        //1번 라인에 동일한 역으로 새 구간 추가
+        ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(1L, 3L, 1L));
+
+        //then - 201 반환
+        assertThat(response.statusCode())
+                .isEqualTo(BAD_REQUEST.value());
+
+    }
+    @DisplayName("구간 생성 시 미존재 라인에 추가 시 예외")
+    @Test
+    void 지하철_구간_추가_미존재_라인_예외_테스트() {
+        //given - 2개 역, 1개 노선 추가
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오남역"));
+
+        //when - 1개 역 추가하고, 상행역으로 2L 설정
+        지하철_역_생성(지하철_역_생성_픽스처("별내별가람역"));// ID : 3L
+
+        //1번 라인에 동일한 역으로 새 구간 추가
+        ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(2L, 3L, 1L));
+
+        //then - 201 반환
+        assertThat(response.statusCode())
+                .isEqualTo(BAD_REQUEST.value());
+
+    }
+
+    @DisplayName("구간 생성 시 구간 하행역이 기존재 시 예외")
+    @Test
+    void 지하철_구간_추가_구간하행역_기존재_예외_테스트() {
+        //given - 2개 역, 1개 노선 추가
+        지하철_역_생성(지하철_역_생성_픽스처("진접역"));
+        지하철_역_생성(지하철_역_생성_픽스처("오남역"));
+        지하철_라인_생성(라인_생성_픽스처("green", 2L, "4호선", 1L, 2L));
+
+        //when - 역 추가하지 않고 기존역을 구간 하행역으로, 상행역으로 2L 설정
+
+        //1번 라인에 동일한 역으로 새 구간 추가
+        ExtractableResponse<Response> response = 지하철_구간_생성(지하철_구간_생성_픽스처(2L, 1L, 1L));
+
+        //then - 201 반환
+        assertThat(response.statusCode())
+                .isEqualTo(BAD_REQUEST.value());
+
+    }
+
 
 }
