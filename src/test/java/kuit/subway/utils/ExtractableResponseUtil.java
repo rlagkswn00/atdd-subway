@@ -30,4 +30,13 @@ public class ExtractableResponseUtil {
                 .then().log().all()
                 .extract();
     }
+
+    public static ExtractableResponse<Response> update(String path, Object body) {
+        return RestAssured.given().log().all()
+                .contentType(ContentType.JSON) // 추가 해야 합니다!
+                .body(body)
+                .when().post(path)
+                .then().log().all()
+                .extract();
+    }
 }
