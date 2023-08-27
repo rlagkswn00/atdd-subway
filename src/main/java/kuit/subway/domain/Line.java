@@ -26,8 +26,8 @@ public class Line extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-//    @Column(nullable = false)
-//    private Long distance;
+    @Column(nullable = false)
+    private Long distance;
 
     @Embedded
     private Sections sections = new Sections();

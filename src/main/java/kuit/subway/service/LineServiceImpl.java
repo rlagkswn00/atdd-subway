@@ -40,6 +40,7 @@ public class LineServiceImpl implements LineService {
 
         Line line = Line.builder()
                 .name(saveLineReq.getName())
+                .distance(saveLineReq.getDistance())
                 .color(saveLineReq.getColor())
                 .sections(new Sections()) // 빌더 혐오 시작;;
                 .build();
