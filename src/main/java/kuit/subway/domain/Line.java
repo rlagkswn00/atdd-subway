@@ -9,36 +9,36 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.sql.Update;
 
+import java.util.List;
+
 
 @Entity
 @Builder
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Line extends BaseEntity{
+public class Line extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
     private String color;
-    @Column(nullable = false)
-    private Long distance;
+
     @Column(nullable = false)
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "down_station_id")
-    private Station downStation;
+//    @Column(nullable = false)
+//    private Long distance;
 
-    @ManyToOne
-    @JoinColumn(name = "up_station_id")
-    private Station upStation;
+    @Embedded
+    private Sections sections = new Sections();
+    public void addSection(Section section){
+        this.sections.addSection(section);
+    }
 
-    public void updateLine(UpdateLineReq updateLineReq, Station upStation, Station downStation) {
+    public void updateLine(UpdateLineReq updateLineReq) {
         this.name = updateLineReq.getName();
-        this.distance = updateLineReq.getDistance();
-        this.downStation = upStation;
-        this.upStation = downStation;
         this.color = updateLineReq.getColor();
     }
 }
