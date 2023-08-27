@@ -5,6 +5,7 @@ import io.restassured.response.Response;
 import kuit.subway.dto.SaveLineReq;
 import kuit.subway.dto.SaveSectionReq;
 
+import static kuit.subway.utils.ExtractableResponseUtil.delete;
 import static kuit.subway.utils.ExtractableResponseUtil.post;
 
 public class SectionStep {
@@ -14,5 +15,8 @@ public class SectionStep {
         return post(PATH, saveSectionReq);
     }
 
+    public static ExtractableResponse<Response> 지하철_구간_삭제(Long id){
+        return delete(PATH + "/" + id);
+    }
 
 }
