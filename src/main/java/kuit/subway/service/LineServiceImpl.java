@@ -1,5 +1,6 @@
 package kuit.subway.service;
 
+import kuit.global.BaseResponseStatus;
 import kuit.global.exception.SubwayException;
 import kuit.subway.domain.Line;
 import kuit.subway.domain.Section;
@@ -130,6 +131,21 @@ public class LineServiceImpl implements LineService {
         line.addSection(section);
 
         return new SaveSectionRes(line.getId());
+    }
+
+    @Override
+    public Long deleteSection(Long lineId) {
+        Line line = lineRepository.findById(lineId).get();
+        validateDeleteSection(line);
+        line.removeSection();
+
+        return lineId;
+    }
+
+    private void validateDeleteSection(Line line) {
+        List<Station> stations = line.getSections().getStations();
+        if(stations.size() == 2)
+            throw new SubwayException(BaseResponseStatus.ONLY_ONE_SECTION);
     }
 
 
