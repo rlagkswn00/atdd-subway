@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.sql.Update;
 
+import java.util.List;
+
 
 @Entity
 @Builder
@@ -40,6 +42,7 @@ public class Line extends BaseEntity {
         return this.sections.getStations();
     }
     public void removeSection() {
+        sections.validateDeleteSection();
         sections.removeSection();
     }
 
