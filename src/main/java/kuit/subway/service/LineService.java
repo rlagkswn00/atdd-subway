@@ -1,9 +1,6 @@
 package kuit.subway.service;
 
-import kuit.subway.dto.FindLinesRes;
-import kuit.subway.dto.SaveLineReq;
-import kuit.subway.dto.SaveLineRes;
-import kuit.subway.dto.UpdateLineReq;
+import kuit.subway.dto.*;
 
 import java.util.List;
 
@@ -17,4 +14,7 @@ public interface LineService {
 
     Long updateLine(Long id, UpdateLineReq updateLineReq);
 
+    SaveSectionRes createSections(SaveSectionReq saveSectionReq);
+
+    Long deleteSection(Long lineId);
 }

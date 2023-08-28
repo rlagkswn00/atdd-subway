@@ -1,14 +1,15 @@
 package kuit.subway.dto;
 
-
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SaveStationRes {
+@Builder
+public class SaveSectionRes {
     private Long id;
 }
+

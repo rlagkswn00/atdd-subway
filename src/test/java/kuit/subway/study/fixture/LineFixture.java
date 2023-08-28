@@ -8,7 +8,7 @@ public class LineFixture {
         return new SaveLineReq(color,distance,name,upStationId,downStationId);
     }
 
-    public static UpdateLineReq 라인_수정_픽스처(String color, Long distance, String name, Long upStationId, Long downStationId){
-        return new UpdateLineReq(color,distance,name,upStationId,downStationId);
+    public static UpdateLineReq 라인_수정_픽스처(String color, String name){
+        return new UpdateLineReq(color,name);
     }
 }
