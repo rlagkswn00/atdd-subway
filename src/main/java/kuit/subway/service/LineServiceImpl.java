@@ -139,7 +139,6 @@ public class LineServiceImpl implements LineService {
     }
 
     private List<FindStationsRes> getStationInfoList(Line line) {
-        List<Station> stations = line.getSections().getStations();
         List<Station> stations = line.getStations();
         List<FindStationsRes> resultStations = stations.stream()
                 .map(station -> {
