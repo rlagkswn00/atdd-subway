@@ -7,7 +7,6 @@ import kuit.subway.domain.Station;
 import lombok.*;
 
 @Entity
-@Builder
 @Getter
 @ToString
 @AllArgsConstructor
@@ -29,4 +28,13 @@ public class Section extends BaseEntity {
     @JoinColumn(name = "line_id")
     private Line line;
 
+    public void setLine(Line line){
+        this.line = line;
+    }
+
+    @Builder
+    public Section(Station upStation, Station downStation){
+        this.upStation = upStation;
+        this.downStation = downStation;
+    }
 }
