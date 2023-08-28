@@ -149,6 +149,7 @@ public class LineServiceImpl implements LineService {
 
     private List<FindStationsRes> getStationInfoList(Line line) {
         List<Station> stations = line.getSections().getStations();
+        List<Station> stations = line.getStations();
         List<FindStationsRes> resultStations = stations.stream()
                 .map(station -> {
                     FindStationsRes findStationsRes = new FindStationsRes(station.getId(), station.getName());
@@ -167,7 +168,7 @@ public class LineServiceImpl implements LineService {
 
         Line line = lineRepository.findById(saveSectionReq.getLineId()).get();
 
-        List<Station> stations = line.getSections().getStations();
+        List<Station> stations = line.getStations();
         //추가하고자 하는 구간의 하행 역이 존재하지 않는지
         Station downStation = stationRepository.findById(saveSectionReq.getDownStationId()).get();
         if(stations.contains(downStation))
