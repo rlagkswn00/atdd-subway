@@ -35,6 +35,7 @@ public class LineServiceImpl implements LineService {
 
         if (lineRepository.existsLineByName(saveLineReq.getName()))
             throw new SubwayException(DUPLICATE_LINE);
+
         Station upStation = stationRepository.findById(saveLineReq.getUpStationId()).get();
         Station downStation = stationRepository.findById(saveLineReq.getDownStationId()).get();
 
@@ -133,18 +134,9 @@ public class LineServiceImpl implements LineService {
     @Override
     public Long deleteSection(Long lineId) {
         Line line = lineRepository.findById(lineId).get();
-        validateDeleteSection(line);
         line.removeSection();
-
         return lineId;
     }
-
-    private void validateDeleteSection(Line line) {
-        List<Station> stations = line.getSections().getStations();
-        if(stations.size() == 2)
-            throw new SubwayException(BaseResponseStatus.ONLY_ONE_SECTION);
-    }
-
 
     private List<FindStationsRes> getStationInfoList(Line line) {
         List<Station> stations = line.getSections().getStations();
