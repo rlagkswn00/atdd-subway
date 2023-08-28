@@ -33,6 +33,7 @@ public class Line extends BaseEntity {
     private Sections sections = new Sections();
     public void addSection(Section section){
         this.sections.addSection(section);
+        section.setLine(this);
     }
 
     public List<Station> getStations(){

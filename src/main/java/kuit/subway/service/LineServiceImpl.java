@@ -48,7 +48,6 @@ public class LineServiceImpl implements LineService {
         Section section = Section.builder()
                 .upStation(upStation)
                 .downStation(downStation)
-                .line(line)
                 .build();
 
         line.addSection(section);
@@ -124,8 +123,8 @@ public class LineServiceImpl implements LineService {
         Section section = Section.builder()
                 .upStation(upStation)
                 .downStation(downStation)
-                .line(line)
                 .build();
+
         line.addSection(section);
 
         return new SaveSectionRes(line.getId());
