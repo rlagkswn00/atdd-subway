@@ -95,7 +95,7 @@ public class LineAcceptanceTest extends AcceptanceTest {
 
         //when - 지하철 노선 수정
         ExtractableResponse<Response> response = 지하철_라인_수정(1L,
-                라인_수정_픽스처("green", 33L, "4호선", 2L, 1L));
+                라인_수정_픽스처("green",  "4호선"));
 
         //then - 200 정상 코드 반환
         assertThat(response.statusCode())

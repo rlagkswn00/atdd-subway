@@ -105,13 +105,11 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public Long updateLine(Long id, UpdateLineReq updateLineReq) {
-        validateUpstationAndDownStation(updateLineReq.getUpStationId(), updateLineReq.getDownStationId());
         validateLine(id);
-
 
         Line line = lineRepository.findById(id).get();
 
-        line.updateLine(updateLineReq);
+        line.updateLine(updateLineReq.getColor(), updateLineReq.getName());
         return id;
     }
 
