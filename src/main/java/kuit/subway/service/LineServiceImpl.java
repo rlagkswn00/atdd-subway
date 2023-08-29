@@ -59,37 +59,22 @@ public class LineServiceImpl implements LineService {
 
     @Override
     @Transactional(readOnly = true)
-    public FindLinesRes findLines(Long id) {
+    public FindLinesRes findLine(Long id) {
         validateLine(id);
         Line line = lineRepository.findById(id).get();
+        List<FindStationsRes> stations = getStationInfoList(line);
 
-        List<FindStationsRes> stationList = getStationInfoList(line);
-
-        return FindLinesRes.builder()
-                .id(id)
-                .stations(stationList)
-                .name(line.getName())
-                .color(line.getColor())
-                .createdDate(line.getCreatedDate())
-                .modifiedDate(line.getModifiedDate())
-                .build();
+        return FindLinesRes.of(line, stations);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<FindLinesRes> findAllLines() {
+    public List<FindLinesRes> findAllLine() {
         List<FindLinesRes> findLinesResList = new ArrayList<>();
         List<Line> allLines = lineRepository.findAll();
         for (Line line : allLines) {
-            List<FindStationsRes> stationInfoList = getStationInfoList(line);
-            findLinesResList.add(FindLinesRes.builder()
-                    .id(line.getId())
-                    .stations(stationInfoList)
-                    .name(line.getName())
-                    .color(line.getColor())
-                    .createdDate(line.getCreatedDate())
-                    .modifiedDate(line.getModifiedDate())
-                    .build());
+            List<FindStationsRes> stations = getStationInfoList(line);
+            findLinesResList.add(FindLinesRes.of(line, stations));
         }
 
         return findLinesResList;
@@ -141,15 +126,12 @@ public class LineServiceImpl implements LineService {
     private List<FindStationsRes> getStationInfoList(Line line) {
         List<Station> stations = line.getStations();
         List<FindStationsRes> resultStations = stations.stream()
-                .map(station -> {
-                    FindStationsRes findStationsRes = new FindStationsRes(station.getId(), station.getName());
-                    return findStationsRes;
-                })
-                .collect(Collectors.toList());
+                .map(station -> FindStationsRes.from(station))
+                .toList();
         return resultStations;
     }
 
-    private void validateCreateSection(SaveSectionReq saveSectionReq){
+    private void validateCreateSection(SaveSectionReq saveSectionReq) {
         //등록하고자 하는 구간내 상행역 != 하행역
         validateUpstationAndDownStation(saveSectionReq.getUpStationId(), saveSectionReq.getDownStationId());
 
@@ -161,18 +143,20 @@ public class LineServiceImpl implements LineService {
         List<Station> stations = line.getStations();
         //추가하고자 하는 구간의 하행 역이 존재하지 않는지
         Station downStation = stationRepository.findById(saveSectionReq.getDownStationId()).get();
-        if(stations.contains(downStation))
+        if (stations.contains(downStation))
             throw new SubwayException(DUPLICATE_STATION);
 
         //마지막 역과 추가하고자 하는 구간의 상행 역이 같은지
-        Station lastStation = stations.get(stations.size()-1);
-        if(lastStation.getId() != saveSectionReq.getUpStationId())
+        Station lastStation = stations.get(stations.size() - 1);
+        if (lastStation.getId() != saveSectionReq.getUpStationId())
             throw new SubwayException(INVALID_UPSTATION_SECTION);
     }
-    private void validateLine(Long lineId){
-        if(!lineRepository.existsById(lineId))
+
+    private void validateLine(Long lineId) {
+        if (!lineRepository.existsById(lineId))
             throw new SubwayException(NOT_EXIST_LINE);
     }
+
     private void validateUpstationAndDownStation(Long upStationId, Long downStationId) {
         if (!stationRepository.existsById(upStationId) || !stationRepository.existsById(downStationId))
             throw new SubwayException(NOT_EXIST_STATION);

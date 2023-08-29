@@ -38,11 +38,8 @@ public class StationServiceImpl implements StationService {
     public List<FindStationsRes> findStations() {
 
         List<FindStationsRes> stations = stationRepository.findAll().stream()
-                .map(s -> FindStationsRes.builder()
-                        .id(s.getId())
-                        .name(s.getName()).build())
+                .map(s -> FindStationsRes.from(s))
                 .toList();
-
         //역이 없는 경우 예외 발생
         if (stations.size() == 0)
             throw new SubwayException(NOT_EXIST_STATION);
