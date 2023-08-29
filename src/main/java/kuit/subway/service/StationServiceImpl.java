@@ -4,7 +4,6 @@ import kuit.global.exception.SubwayException;
 import kuit.subway.domain.Station;
 import kuit.subway.dto.FindStationsRes;
 import kuit.subway.dto.SaveStationReq;
-import kuit.subway.dto.SaveStationRes;
 import kuit.subway.repository.StationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ public class StationServiceImpl implements StationService {
     private final StationRepository stationRepository;
 
     @Override
-    public SaveStationRes createStation(SaveStationReq saveStationReq) {
+    public Long createStation(SaveStationReq saveStationReq) {
         //중복 역 추가 시도 시 예외 발생
         if (stationRepository.existsStationByName(saveStationReq.getName()))
             throw new SubwayException(DUPLICATE_STATION);
@@ -31,7 +30,7 @@ public class StationServiceImpl implements StationService {
                 .name(saveStationReq.getName())
                 .build();
         Long id = stationRepository.save(station).getId();
-        return new SaveStationRes(id);
+        return id;
     }
 
     @Override
