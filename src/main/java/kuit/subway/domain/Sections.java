@@ -20,7 +20,7 @@ public class Sections {
     private List<Section> sections = new ArrayList<>();
 
     public void validateDeleteSection(){
-        if(sections.size() == 2)
+        if(sections.size() == 1)
             throw new SubwayException(BaseResponseStatus.ONLY_ONE_SECTION);
     }
     public void addSection(Section section) {
@@ -44,6 +44,4 @@ public class Sections {
         }
         return stations;
     }
-
-
 }
