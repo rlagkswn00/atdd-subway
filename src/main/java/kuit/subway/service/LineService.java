@@ -5,16 +5,16 @@ import kuit.subway.dto.*;
 import java.util.List;
 
 public interface LineService {
-    SaveLineRes createLines(SaveLineReq saveLineReq);
-    FindLinesRes findLines(Long id);
+    Long createLines(SaveLineReq saveLineReq);
+    FindLinesRes findLine(Long id);
 
-    List<FindLinesRes> findAllLines();
+    List<FindLinesRes> findAllLine();
 
     Long deleteLine(Long id);
 
     Long updateLine(Long id, UpdateLineReq updateLineReq);
 
-    SaveSectionRes createSections(SaveSectionReq saveSectionReq);
+    Long createSections(SaveSectionReq saveSectionReq);
 
     Long deleteSection(Long lineId);
 }

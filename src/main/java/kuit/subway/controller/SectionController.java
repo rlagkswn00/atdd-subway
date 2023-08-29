@@ -1,7 +1,6 @@
 package kuit.subway.controller;
 
 import kuit.subway.dto.SaveSectionReq;
-import kuit.subway.dto.SaveSectionRes;
 import kuit.subway.service.LineService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,9 @@ public class SectionController {
     private final LineService lineService;
 
     @PostMapping
-    ResponseEntity<SaveSectionRes> createSection(@RequestBody SaveSectionReq saveSectionReq){
-        SaveSectionRes saveSectionRes = lineService.createSections(saveSectionReq);
-        return ResponseEntity.created(URI.create("/sections/" + saveSectionRes.getId())).body(saveSectionRes);
+    ResponseEntity<Long> createSection(@RequestBody SaveSectionReq saveSectionReq){
+        Long cretaeId = lineService.createSections(saveSectionReq);
+        return ResponseEntity.created(URI.create("/sections/" + cretaeId)).body(cretaeId);
 
     }
 

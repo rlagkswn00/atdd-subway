@@ -30,7 +30,7 @@ public class LineServiceImpl implements LineService {
     private final StationRepository stationRepository;
 
     @Override
-    public SaveLineRes createLines(SaveLineReq saveLineReq) {
+    public Long createLines(SaveLineReq saveLineReq) {
         validateUpstationAndDownStation(saveLineReq.getUpStationId(), saveLineReq.getDownStationId());
 
         if (lineRepository.existsLineByName(saveLineReq.getName()))
@@ -54,7 +54,7 @@ public class LineServiceImpl implements LineService {
         line.addSection(section);
         Long id = lineRepository.save(line).getId();
 
-        return new SaveLineRes(id);
+        return id;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public SaveSectionRes createSections(SaveSectionReq saveSectionReq) {
+    public Long createSections(SaveSectionReq saveSectionReq) {
         validateCreateSection(saveSectionReq);
 
         Line line = lineRepository.findById(saveSectionReq.getLineId()).get();
@@ -128,7 +128,7 @@ public class LineServiceImpl implements LineService {
 
         line.addSection(section);
 
-        return new SaveSectionRes(line.getId());
+        return line.getId();
     }
 
     @Override
