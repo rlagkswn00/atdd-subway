@@ -1,4 +1,4 @@
-package kuit.subway.study;
+package kuit.subway.example;
 
 import io.restassured.RestAssured;
 import kuit.subway.AcceptanceTest;
